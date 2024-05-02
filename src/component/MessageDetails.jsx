@@ -1,48 +1,48 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const MessageDetails = () => {
-  const [data, setData] = useState();
-  const [showError, setShowError] = useState(false);
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const [data, setData] = useState()
+  const [showError, setShowError] = useState(false)
+  const { id } = useParams()
+  const navigate = useNavigate()
 
   const getInfo = () => {
-    const url = `https://message-app-g2py.onrender.com/api/v1/messages/${id}`;
+    const url = `https://message-app-g2py.onrender.com/api/v1/messages/${id}`
     axios
       .get(url)
-      .then(res => {
-        setData(res.data.data.message);
+      .then((res) => {
+        setData(res.data.data.message)
       })
       .catch(() => {
-        setShowError(true);
-      });
-  };
+        setShowError(true)
+      })
+  }
 
   const handleGoBack = () => {
-    navigate(-1);
-  };
+    navigate(-1)
+  }
 
-  const markAsRead = id => {
-    const url = `https://message-app-g2py.onrender.com/api/v1/messages/${id}`;
+  const markAsRead = (id) => {
+    const url = `https://message-app-g2py.onrender.com/api/v1/messages/${id}`
     axios
       .put(url, {
         isRead: true,
       })
-      .then(res => {
-        setData(res.data.data.messages);
+      .then((res) => {
+        setData(res.data.data.messages)
       })
-      .catch(error => {
-        setShowError(true);
-      });
-  };
+      .catch((error) => {
+        setShowError(true)
+      })
+  }
 
-  getInfo();
+  getInfo()
 
   useEffect(() => {
-    markAsRead(id);
-  }, []);
+    markAsRead(id)
+  }, [])
 
   return (
     <>
@@ -50,11 +50,11 @@ const MessageDetails = () => {
         <p>Oops, something went wrong. please refresh</p>
       ) : (
         <>
-          <div className='w-fit'>
+          <div className='w-fit mt-5 ml-8'>
             <p
               className='p-2 cursor-pointer bg-gray-400 inline rounded-lg'
               onClick={() => {
-                handleGoBack();
+                handleGoBack()
               }}
             >
               back
@@ -77,7 +77,7 @@ const MessageDetails = () => {
         </>
       )}
     </>
-  );
-};
+  )
+}
 
-export default MessageDetails;
+export default MessageDetails
