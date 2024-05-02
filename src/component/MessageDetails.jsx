@@ -8,41 +8,41 @@ const MessageDetails = () => {
   const { id } = useParams()
   const navigate = useNavigate()
 
-  const getInfo = () => {
-    const url = `https://message-app-g2py.onrender.com/api/v1/messages/${id}`
-    axios
-      .get(url)
-      .then((res) => {
-        setData(res.data.data.message)
-      })
-      .catch(() => {
+  useEffect(() => {
+    const getInfo = async () => {
+      try {
+        const response = await axios.get(
+          `https://message-app-g2py.onrender.com/api/v1/messages/${id}`
+        )
+        setData(response.data.data.message)
+      } catch (error) {
         setShowError(true)
-      })
-  }
+      }
+    }
+
+    getInfo()
+  }, [id])
 
   const handleGoBack = () => {
     navigate(-1)
   }
 
-  const markAsRead = (id) => {
-    const url = `https://message-app-g2py.onrender.com/api/v1/messages/${id}`
-    axios
-      .put(url, {
-        isRead: true,
-      })
-      .then((res) => {
-        setData(res.data.data.messages)
-      })
-      .catch((error) => {
-        setShowError(true)
-      })
+  const markAsRead = async (id) => {
+    try {
+      await axios.put(
+        `https://message-app-g2py.onrender.com/api/v1/messages/${id}`,
+        { isRead: true }
+      )
+    } catch (error) {
+      setShowError(true)
+    }
   }
 
-  getInfo()
-
   useEffect(() => {
-    markAsRead(id)
-  }, [])
+    if (data) {
+      markAsRead(data.id)
+    }
+  }, [data])
 
   return (
     <>
