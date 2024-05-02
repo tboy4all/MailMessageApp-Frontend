@@ -15,7 +15,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path='messages' element={<Message />} />
           <Route path='messages/:id' element={<MessageDetails />} />
-          {/* <Route path='*' element={<Navigate to={<NotFound />} />} /> */}
+          <Route path='*' element={<Navigate to={<NotFound />} />} />
         </Route>
       </Routes>
     </>
