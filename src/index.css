@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  background-color: #e3e7eb;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.link {
+  font-weight: 500;
+  padding: 20px;
+  color: #646cff;
+  color: white;
+  text-decoration: inherit;
+  background-color: rgb(107 114 128);
+  border-radius: 10px;
+  transition: all 0.9s;
+}
+
+.link:hover {
+  background-color: rgb(33, 45, 114);
+}
+
+.input {
+  @apply w-full h-[35px] rounded-[4px] p-2 my-2 outline-none text-white bg-[#adabab] placeholder:text-white;
+}
