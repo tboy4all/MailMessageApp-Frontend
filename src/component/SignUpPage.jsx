@@ -11,7 +11,7 @@ const SignUpPage = () => {
   const [email, setEmail] = useState('')
   const [error, setError] = useState(false)
   const [password, setPassword] = useState('')
-  const [confirmpassword, setConfirmPassword] = useState('')
+  const [passwordConfirm, setPasswordConfirm] = useState('')
 
   const trackName = (e) => {
     setName(e.target.value)
@@ -25,8 +25,8 @@ const SignUpPage = () => {
     setPassword(e.target.value)
   }
 
-  const trackConfirmPassword = (e) => {
-    setConfirmPassword(e.target.value)
+  const trackpasswordConfirm = (e) => {
+    setPasswordConfirm(e.target.value)
   }
 
   const requestInfo = {
@@ -36,7 +36,7 @@ const SignUpPage = () => {
       name,
       email,
       password,
-      confirmpassword,
+      passwordConfirm,
     },
     headers: {
       'Content-type': 'Application/json',
@@ -58,6 +58,7 @@ const SignUpPage = () => {
         }, 2000)
       })
       .catch((e) => {
+        console.log(e)
         setError(true)
       })
   }
@@ -106,7 +107,7 @@ const SignUpPage = () => {
               className='input'
               type='password'
               placeholder='Confirm Password'
-              onChange={trackConfirmPassword}
+              onChange={trackpasswordConfirm}
               required
             />
             <button
