@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useState } from 'react'
+import { FaSpinner } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -82,7 +83,14 @@ const LoginPage = () => {
               type='submit'
               disabled={loading}
             >
-              {loading ? 'Logging in...' : 'Login'}
+              {loading ? (
+                <div className='flex items-center'>
+                  <FaSpinner className='animate-spin mr-2' />
+                  <span>Logging in...</span>
+                </div>
+              ) : (
+                'Login'
+              )}
             </button>
           </form>
         </div>

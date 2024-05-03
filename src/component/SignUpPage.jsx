@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useState } from 'react'
+import { FaSpinner } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -116,7 +117,14 @@ const SignUpPage = () => {
             className='signUp-btn bg-blue-500 mt-5 text-white py-2 px-[30px] '
             disabled={loading}
           >
-            {loading ? 'Signing...' : 'Sign Up'}
+            {loading ? (
+              <div className='flex items-center'>
+                <FaSpinner className='animate-spin mr-2' />
+                <span>Signing In...</span>
+              </div>
+            ) : (
+              'Sign Up'
+            )}
           </button>
         </form>
       </div>
