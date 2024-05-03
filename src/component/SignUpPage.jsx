@@ -1,17 +1,17 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import Error from './Error'
+// import Spinner from './Spinner'
 
 const SignUpPage = () => {
   const navigate = useNavigate()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [error, setError] = useState(false)
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const trackName = (e) => {
     setName(e.target.value)
@@ -25,100 +25,101 @@ const SignUpPage = () => {
     setPassword(e.target.value)
   }
 
-  const trackpasswordConfirm = (e) => {
+  const trackPasswordConfirm = (e) => {
     setPasswordConfirm(e.target.value)
-  }
-
-  const requestInfo = {
-    url: 'https://message-app-g2py.onrender.com/api/v1/users/signup',
-    method: 'POST',
-    data: {
-      name,
-      email,
-      password,
-      passwordConfirm,
-    },
-    headers: {
-      'Content-type': 'Application/json',
-      withCredentials: true,
-    },
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    axios(requestInfo)
-      .then((response) => {
-        const name = response.data.data.user.name
-        let token = response.data.token
-        localStorage.setItem('SavedToken', 'Bearer ' + token)
-        localStorage.setItem('userName', name)
-        toast.success(`Welcome ${name}, your account was created succssfully`)
-        setTimeout(() => {
-          navigate('/Dashboard')
-        }, 2000)
-      })
-      .catch((e) => {
-        console.log(e)
-        setError(true)
-      })
+    setLoading(true)
+
+    try {
+      const response = await axios.post(
+        'https://message-app-g2py.onrender.com/api/v1/users/signup',
+        {
+          name,
+          email,
+          password,
+          passwordConfirm,
+        }
+        // {
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     withCredentials: true,
+        //   },
+        //   method: 'POST',
+        // }
+      )
+
+      const { name: userName, token } = response.data.data.user
+      localStorage.setItem('SavedToken', `Bearer ${token}`)
+      localStorage.setItem('userName', userName)
+      toast.success(
+        `Welcome ${userName}, your account was created successfully`
+      )
+      setTimeout(() => {
+        navigate('/Dashboard')
+      }, 2000)
+    } catch (error) {
+      console.error(error)
+      toast.error(
+        'Oops, network or server issue. Please try refreshing the page or login again.'
+      )
+    }
+
+    setLoading(false)
   }
 
   return (
     <>
       <ToastContainer />
-      {error ? (
-        <Error
-          message={
-            'Oops, network or server issue. Please try refreshing the page again or login again'
-          }
-        />
-      ) : (
-        <div className='w-1/3 h-max p-[30px] rounded-lg mt-10 mx-auto mb-2 bg-white '>
-          <h1>Sign Up </h1>
-          <p>Please fill in this form to create an account!</p>
-          <hr className='mt-2' />
-          <form onSubmit={handleSubmit}>
-            <label htmlFor='text' style={{ display: 'none' }}></label>
+      <div className='w-1/3 h-max p-[30px] rounded-lg mt-10 mx-auto mb-2 bg-white '>
+        <h1>Sign Up</h1>
+        <p>Please fill in this form to create an account!</p>
+        <hr className='mt-2' />
+        <form onSubmit={handleSubmit}>
+          <input
+            className='input'
+            type='text'
+            placeholder='Name'
+            onChange={trackName}
+            required
+          />
 
-            <input
-              className='input'
-              type='text'
-              placeholder='Name'
-              onChange={trackName}
-              required
-            />
+          <input
+            className='input'
+            type='email'
+            placeholder='Email'
+            onChange={trackEmail}
+            required
+          />
 
-            <input
-              className='input'
-              type='email'
-              placeholder='Email'
-              onChange={trackEmail}
-              required
-            />
-            <input
-              className='input'
-              type='password'
-              placeholder='Password'
-              onChange={trackPassword}
-              minLength={8}
-              required
-            />
-            <input
-              className='input'
-              type='password'
-              placeholder='Confirm Password'
-              onChange={trackpasswordConfirm}
-              required
-            />
-            <button
-              type='submit'
-              className='signUp-btn bg-blue-500 mt-5 text-white py-2 px-[30px] '
-            >
-              Sign Up
-            </button>
-          </form>
-        </div>
-      )}
+          <input
+            className='input'
+            type='password'
+            placeholder='Password'
+            onChange={trackPassword}
+            minLength={8}
+            required
+          />
+
+          <input
+            className='input'
+            type='password'
+            placeholder='Confirm Password'
+            onChange={trackPasswordConfirm}
+            required
+          />
+
+          <button
+            type='submit'
+            className='signUp-btn bg-blue-500 mt-5 text-white py-2 px-[30px] '
+            disabled={loading}
+          >
+            {loading ? 'Signing...' : 'Sign Up'}
+          </button>
+        </form>
+      </div>
     </>
   )
 }
